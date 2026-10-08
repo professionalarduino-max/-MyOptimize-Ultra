@@ -1,0 +1,27 @@
+{
+  "required": true,
+  "package": "com.myoptimize.ultra.mixin",
+  "compatibilityLevel": "JAVA_17",
+  "plugin": "com.myoptimize.ultra.mixin.MyOptimizeMixinPlugin",
+  "client": [
+    "MixinBlockEntityRenderDispatcher",
+    "MixinChunkBuilder",
+    "MixinClientPlayNetworkHandler",
+    "MixinDebugHud",
+    "MixinEntityRenderDispatcher",
+    "MixinGameRenderer",
+    "MixinParticleManager",
+    "MixinRenderSystem",
+    "MixinServerWorld",
+    "MixinTextRenderer",
+    "MixinWorld",
+    "MixinWorldRenderer",
+    "MixinWorldRendererClouds",
+    "MixinWorldRendererSky",
+    "DebugHudAccessor",
+    "ParticleManagerAccessor"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

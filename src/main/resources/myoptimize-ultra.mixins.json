@@ -1,0 +1,25 @@
+{
+  "required": true,
+  "package": "com.myoptimize.ultra.mixin",
+  "compatibilityLevel": "JAVA_21",
+  "plugin": "com.myoptimize.ultra.mixin.MyOptimizeMixinPlugin",
+  "client": [
+    "DebugHudAccessor",
+    "MixinBlockEntityRenderDispatcher",
+    "MixinChunkBuilder",
+    "MixinClientPlayNetworkHandler",
+    "MixinDebugHud",
+    "MixinEntityRenderDispatcher",
+    "MixinGameRenderer",
+    "MixinParticleManager",
+    "MixinRenderSystem",
+    "MixinServerWorld",
+    "MixinTextRenderer",
+    "MixinWorld",
+    "MixinWorldRenderer",
+    "ParticleManagerAccessor"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

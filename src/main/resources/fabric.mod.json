@@ -1,0 +1,36 @@
+{
+  "schemaVersion": 1,
+  "id": "myoptimize-ultra",
+  "version": "${version}",
+  "name": "MyOptimize Ultra",
+  "description": "Ultra performance optimization mod: rendering, chunks, entities, memory, GC, lighting, network, textures, GUI and startup. Maximum FPS, minimal input lag, stable frametime — without breaking vanilla mechanics.",
+  "authors": [
+    "MyOptimize Team"
+  ],
+  "contact": {
+    "homepage": "https://example.com/myoptimize-ultra",
+    "sources": "https://example.com/myoptimize-ultra"
+  },
+  "license": "MIT",
+  "icon": "assets/myoptimize-ultra/icon.png",
+  "environment": "client",
+  "entrypoints": {
+    "client": [
+      "com.myoptimize.ultra.MyOptimizeUltra"
+    ]
+  },
+  "mixins": [
+    "myoptimize-ultra.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=${loaderMin}",
+    "fabric-api": "*",
+    "minecraft": "${mcDepends}",
+    "java": ">=${javaVersion}"
+  },
+  "suggests": {
+    "sodium": "*",
+    "lithium": "*",
+    "iris": "*"
+  }
+}

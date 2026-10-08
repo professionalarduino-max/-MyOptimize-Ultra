@@ -1,0 +1,21 @@
+{
+  "name": "MyOptimize Ultra (Codespaces)",
+  "image": "mcr.microsoft.com/devcontainers/java:21",
+  "features": {
+    "ghcr.io/devcontainers/features/java:1": {
+      "version": "21",
+      "installMaven": false,
+      "installGradle": true
+    }
+  },
+  "postCreateCommand": "gradle wrapper --gradle-version 8.10.2 || true",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "vscjava.vscode-gradle",
+        "vscjava.vscode-java-pack"
+      ]
+    }
+  },
+  "remoteUser": "vscode"
+}

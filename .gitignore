@@ -1,0 +1,30 @@
+.gradle/
+build/
+run/
+out/
+*.class
+*.jar
+!.gradle-wrapper.jar
+
+# IDE
+.idea/
+*.iml
+*.iws
+*.ipr
+.vscode/
+.settings/
+.project
+.classpath
+.factorypath
+*.launch
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Loom
+.loom/
+
+# Готовые jar (маленькие, для скачивания без сборки)
+!build/libs/*.jar
+!versions/*/build/libs/*.jar

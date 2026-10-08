@@ -1,0 +1,82 @@
+plugins {
+    id 'fabric-loom' version '1.18.3' apply false
+    id 'java'
+}
+
+// Общий конфиг для всех версионных модулей (versions/v*).
+// Каждый модуль собирает: общее ядро (src/main/java) + свою ветку маппингов
+// (src/yarn/java или src/mojmap/java) + свои миксины (src/mixin/...).
+subprojects {
+    apply plugin: 'fabric-loom'
+    apply plugin: 'java'
+
+    group = project.maven_group
+    version = "${project.mod_version}+${project.minecraft_version}"
+
+    base {
+        archivesName = "myoptimize-ultra-${project.mod_version}+${project.minecraft_version}"
+    }
+
+    dependencies {
+        minecraft "com.mojang:minecraft:${project.minecraft_version}"
+        if (project.mappings_mode == 'mojmap') {
+            // 26.x: игра без обфускации, official Mojang mappings, без intermediary.
+            mappings loom.officialMojangMappings()
+        } else {
+            mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
+        }
+        modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
+        modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
+    }
+
+    sourceSets {
+        main {
+            // общее ядро + ветка маппингов
+            java.srcDirs += [
+                rootProject.file('src/main/java'),
+                rootProject.file("src/${project.code_variant}/java")
+            ]
+            // миксины: общий список из property mixin_dirs (через запятую)
+            project.mixin_dirs.split(',').each { d ->
+                java.srcDirs += rootProject.file("src/mixin/${d}/java")
+            }
+            resources.srcDirs += [
+                rootProject.file('src/main/resources'),
+                rootProject.file("src/mixin/${project.mixin_resources}/resources")
+            ]
+        }
+    }
+
+    java {
+        toolchain {
+            languageVersion = JavaLanguageVersion.of(project.java_version as int)
+        }
+        withSourcesJar()
+    }
+
+    tasks.withType(JavaCompile).configureEach {
+        it.options.encoding = 'UTF-8'
+        it.options.release = project.java_version as int
+    }
+
+    processResources {
+        inputs.property 'version', project.version
+        inputs.property 'mcDepends', project.mc_depends
+        inputs.property 'javaVersion', project.java_version
+        inputs.property 'loaderMin', project.loader_min
+        filesMatching('fabric.mod.json') {
+            expand(
+                'version': project.version,
+                'mcDepends': project.mc_depends,
+                'javaVersion': project.java_version,
+                'loaderMin': project.loader_min
+            )
+        }
+    }
+
+    jar {
+        from(rootProject.file('LICENSE')) {
+            rename { "LICENSE_${project.base.archivesName.get()}" }
+        }
+    }
+}

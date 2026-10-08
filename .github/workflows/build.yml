@@ -1,0 +1,86 @@
+name: Build all Minecraft versions
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: ${{ matrix.module }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        module:
+          - v1.20
+          - v1.20.1
+          - v1.20.2
+          - v1.20.3
+          - v1.20.4
+          - v1.20.5
+          - v1.20.6
+          - v1.21
+          - v1.21.1
+          - v1.21.2
+          - v1.21.3
+          - v1.21.4
+          - v1.21.5
+          - v1.21.6
+          - v1.21.7
+          - v1.21.8
+          - v1.21.9
+          - v1.21.10
+          - v1.21.11
+          - v26.1
+          - v26.1.1
+          - v26.1.2
+          - v26.2
+          - v26.3
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Java 21 (базовая; toolchains для модулей подтянутся сами)
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v3
+
+      - name: Generate wrapper (если не закоммичен)
+        run: gradle wrapper --gradle-version 8.10.2 || true
+
+      # Каждый модуль — своя версия Minecraft, yarn/mojmap, Java toolchain (17/21/25).
+      # Loom скачает нужный JDK через foojay-resolver автоматически.
+      - name: Build module
+        run: ./gradlew :${{ matrix.module }}:build --no-daemon
+
+      - name: Upload jar
+        uses: actions/upload-artifact@v4
+        with:
+          name: myoptimize-ultra-${{ matrix.module }}
+          path: versions/${{ matrix.module }}/build/libs/*.jar
+          if-no-files-found: error
+
+  release:
+    name: Release (on tag)
+    needs: build
+    if: startsWith(github.ref, 'refs/tags/')
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download all jars
+        uses: actions/download-artifact@v4
+        with:
+          path: all-jars
+          pattern: myoptimize-ultra-*
+          merge-multiple: true
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: all-jars/*.jar
+          name: ${{ github.ref_name }}
